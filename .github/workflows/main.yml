@@ -1,0 +1,31 @@
+name: Auto Deploy
+
+on:
+  push:
+    branches:
+      - main
+      # - trial
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Deploy to Master
+        if: github.ref == 'refs/heads/main'
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          username: ${{ secrets.SSH_USERNAME }}
+          script: |
+            git config --global --add safe.directory /var/www/wwp-vps
+            cd /var/www/wwp-vps/
+            git status
+            git config --global credential.helper store
+            git pull
+            composer install --no-interaction --prefer-dist --optimize-autoloader
+            php artisan migrate
+            php artisan optimize:clear
