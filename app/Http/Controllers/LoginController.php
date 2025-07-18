@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
-
 class LoginController extends Controller
 {
     /**
@@ -29,7 +28,7 @@ class LoginController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email|max:255',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -41,15 +40,23 @@ class LoginController extends Controller
         }
 
         try {
-            $response = Http::post(env('API_BASE_URL') . '/api/v1/user/login', [
-                'email' => $request->email,
+            $response = Http::asForm()
+            ->post('http://localhost:3000/api/v1/user/login', [
+                'email'    => $request->email,
                 'password' => $request->password,
             ]);
 
             if ($response->successful()) {
-                return response()->json($response->json(), $response->status());
+                $data = $response->json();
+                $request->session()->put('accessToken', $data['data']['accessToken']);
+                $request->session()->put('user', $data['data']['user']);
+
+                return redirect()->route('post.index');
             } else {
-                return response()->json($response->json(), $response->status());
+                // Jika login gagal, kembali ke halaman login dengan pesan error
+                return back()->withErrors([
+                    'email' => 'The provided credentials do not match our records.',
+                ]);
             }
         } catch (\Exception $e) {
             return response()->json([

@@ -1,0 +1,114 @@
+body {
+    background-color: #fafafa;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    max-width: 350px;
+    width: 100%;
+}
+
+.card {
+    border: 1px solid #dbdbdb;
+    border-radius: 1px;
+    background-color: #fff;
+    margin-bottom: 10px;
+}
+
+.card-body {
+    padding: 40px;
+    text-align: center;
+}
+
+.logo {
+    font-family: 'Grand Hotel', cursive;
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.form-control {
+    background-color: #fafafa;
+    border: 1px solid #dbdbdb;
+    border-radius: 3px;
+    padding: 9px 8px;
+    font-size: 12px;
+}
+
+.form-control:focus {
+    background-color: #fafafa;
+    border-color: #a8a8a8;
+    box-shadow: none;
+}
+
+.btn-primary {
+    background-color: #0095f6;
+    border-color: #0095f6;
+    border-radius: 3px;
+    font-weight: 600;
+    padding: 5px 9px;
+    font-size: 14px;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background-color: #0077c6;
+    border-color: #0077c6;
+}
+
+.or-separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #8e8e8e;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 20px 0;
+}
+
+.or-separator::before,
+.or-separator::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #dbdbdb;
+}
+
+.or-separator:not(:empty)::before {
+    margin-right: .25em;
+}
+
+.or-separator:not(:empty)::after {
+    margin-left: .25em;
+}
+
+.forgot-password a {
+    color: #00376b;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.signup-card {
+    padding: 20px;
+    font-size: 14px;
+}
+
+.signup-card a {
+    color: #0095f6;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+@media (max-width: 450px) {
+    body {
+        background-color: #fff;
+    }
+    .card {
+        border: none;
+    }
+    .login-container {
+        padding: 0 20px;
+    }
+}

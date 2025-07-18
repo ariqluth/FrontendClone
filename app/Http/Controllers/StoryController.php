@@ -14,12 +14,19 @@ class StoryController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $storyResponse = Http::get(env('API_BASE_URL') . '/api/v1/story');
+            $token = $request->session()->get('accessToken');
+            $storyResponse = Http::asForm()
+            ->withHeaders([
+                'Authorization' => 'Bearer ' . $token,
+            ])
+            ->get('http://localhost:3000/api/v1/story');
 
-            $viewedResponse = Http::get(env('API_BASE_URL') . '/api/v1/storyView', [
+            $viewedResponse = Http::asForm()->withHeaders([
+                'Authorization' => 'Bearer ' . $token,
+            ])->get('http://localhost:3000/api/v1/storyView', [
                 'user_id' => Auth::id()
             ]);
 
@@ -44,11 +51,14 @@ class StoryController extends Controller
      * Get all posts from backend API.
      *
      * @return \Illuminate\Http\JsonResponse
-     */
-    public function show($id)
+     */ 
+    public function show(Request $request, $id)
     {
         try {
-            $response = Http::get(env('API_BASE_URL') . '/api/v1/story/' . $id);
+            $token = $request->session()->get('accessToken');
+            $response = Http::asForm()->withHeaders([
+                'Authorization' => 'Bearer ' . $token,
+            ])->get('http://localhost:3000/api/v1/story/' . $id);
 
             if ($response->successful()) {
                 return view('storys.all', ['story' => $response->views()]);
@@ -75,10 +85,13 @@ class StoryController extends Controller
         
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         try {
-            $response = Http::delete(env('API_BASE_URL') . '/api/v1/story/' . $id);
+            $token = $request->session()->get('accessToken');
+            $response = Http::asForm()->withHeaders([
+                'Authorization' => 'Bearer ' . $token,
+            ])->delete('http://localhost:3000/api/v1/story/' . $id);
 
             if ($response->successful()) {
                 return response()->json($response->json(), $response->status());

@@ -43,7 +43,7 @@ class RegisterController extends Controller
         }
 
         try {
-            $response = Http::post(env('API_BASE_URL') . '/api/v1/user/register', [
+            $response = Http::post('http://localhost:3000/api/v1/user/register', [
                 'name' => $request->name,
                 'username' => $request->username,
                 'email' => $request->email,

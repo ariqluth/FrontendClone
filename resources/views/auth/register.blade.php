@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign up • Instagram</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ asset('css/login.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/login.css') }}" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap" rel="stylesheet">
@@ -40,7 +40,7 @@
         </div>
 
         <div class="card signup-card text-center">
-            <p class="mb-0">Have an account? <a href="{{ route('login') }}">Log in</a></p>
+            <p class="mb-0">Have an account? <a href="{{ route('login.index') }}">Log in</a></p>
         </div>
     </div>
 

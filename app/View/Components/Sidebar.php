@@ -4,6 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Request;
 class Sidebar extends Component
 {
     public $title;
@@ -26,7 +27,9 @@ class Sidebar extends Component
     public function render()
     {
         // user profile and logout get api from backend
-        $userLogout = Http::post(env('API_BASE_URL') . '/api/v1/user/logout');
+        $userLogout = Http::asForm()->withHeaders([
+            'Authorization' => 'Bearer ' . session('accessToken'),
+        ])->post('http://localhost:3000/api/v1/user/logout');
         $responseLogout = $userLogout->json();
         return view('components.sidebar', compact('responseLogout'));
     }

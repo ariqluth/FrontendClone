@@ -13,10 +13,15 @@ class PostController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $response = Http::get(env('API_BASE_URL') . '/api/v1/posts');
+            $token = $request->session()->get('accessToken');
+            $response = Http::asForm()
+            ->withHeaders([
+                'Authorization' => 'Bearer ' . $token,
+            ])
+            ->get('http://localhost:3000/api/v1/posts');
 
             if ($response->successful()) {
                 $postsData = $response->json('data', []);
@@ -56,7 +61,12 @@ class PostController extends Controller
         }
 
         try {
-            $response = Http::post(env('API_BASE_URL') . '/api/v1/posts', [
+            $token = $request->session()->get('accessToken');
+            $response = Http::asForm()
+            ->withHeaders([
+                'Authorization' => 'Bearer ' . $token,
+            ])
+            ->post('http://localhost:3000/api/v1/posts', [
                 'content' => $request->content,
                 'imageUrl' => $request->imageUrl,
                 'authorId' => $request->authorId,
@@ -82,10 +92,15 @@ class PostController extends Controller
      * @param  string  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         try {
-            $response = Http::get(env('API_BASE_URL') . '/api/v1/posts/' . $id);
+            $token = $request->session()->get('accessToken');
+            $response = Http::asForm()
+            ->withHeaders([
+                'Authorization' => 'Bearer ' . $token,
+            ])
+            ->get('http://localhost:3000/api/v1/posts/' . $id);
 
             if ($response->successful()) {
                 return response()->json($response->json(), $response->status());
@@ -105,12 +120,17 @@ class PostController extends Controller
      * Delete post via backend API.
      *
      * @param  string  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse    
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         try {
-            $response = Http::delete(env('API_BASE_URL') . '/api/v1/posts/' . $id);
+            $token = $request->session()->get('accessToken');
+            $response = Http::asForm()
+            ->withHeaders([
+                'Authorization' => 'Bearer ' . $token,
+            ])
+            ->delete('http://localhost:3000/api/v1/posts/' . $id);
 
             if ($response->successful()) {
                 return response()->json($response->json(), $response->status());

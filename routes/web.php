@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\DemoController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\StoryController;
 use Illuminate\Support\Facades\Route;
-use App\Models\User;
-use App\Http\Controllers\UserController;
-use App\Models\Category;
-use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,46 +17,36 @@ use Illuminate\Http\Request;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/', [LoginController::class, 'index'])->name('login.index');
 
-Route::post('/', 'LoginController@login')->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login.create');
 
-Route::get('/register', 'RegisterController@index')->name('register.index');
+Route::get('/register', [RegisterController::class, 'index'])->name('register.index');
+
+Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
+
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::get('/reset-password', [ResetPasswordController::class, 'index'])->name('reset-password.index');
+
+Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('reset-password.post');
+
+Route::get('/beranda', [PostController::class, 'index'])->name('post.index');
+
+Route::get('/post-create', [PostController::class, 'create'])->name('post.create');
+
+Route::post('/post-store', [PostController::class, 'store'])->name('post.store');
+
+Route::delete('/post-delete/{post}', [PostController::class, 'destroy'])->name('post.destroy');
+
+Route::get('/post-show/{post}', [PostController::class, 'show'])->name('post.show');
+
+Route::post('/post-update/{post}', [PostController::class, 'update'])->name('post.update');
+
+Route::get('/stories', [StoryController::class, 'index'])->name('story.index');
+
+Route::get('/stories/{userId', [StoryController::class, 'show'])->name('story.show');
+
+Route::post('/stories', [StoryController::class, 'store'])->name('story.store');
 
 
-// Comment Route
-Route::resource('comments', 'CommentController');
-
-// Post Route
-Route::get('/beranda', 'PostsController@index')->name('post.index');
-
-Route::get('/p/create', 'PostsController@create')->name('post.create');
-
-Route::post('like/{like}', 'LikeController@update2')->name('like.create');
-
-Route::post('/p', 'PostsController@store')->name('post.store');
-
-Route::delete('/p/{post}', 'PostsController@destroy')->name('post.destroy');
-
-Route::get('/p/{post}', 'PostsController@show')->name('post.show');
-
-Route::post('/p/{post}', 'PostsController@updatelikes')->name('post.update'); //  This need more time
-
-Route::get('/explore', 'PostsController@explore')->name('post.explore'); // Explore Page
-
-Route::get('/posts', 'PostsController@vue_index'); // Infinite scrolling
-
-// Profile Route
-Route::get('/profile/{user}/edit', 'ProfilesController@edit')->name('profile.edit');
-
-Route::get('/profile/{user}', 'ProfilesController@index')->name('profile.index');
-
-Route::patch('/profile/{user}', 'ProfilesController@update')->name('profile.update');
-
-Route::any('/search', 'ProfilesController@search')->name('profile.search'); // Search Page
-
-// Stories Route
-Route::get('/stories/create', 'StoryController@create')->name('stories.create');
-
-Route::get('/stories/{user}', 'StoryController@show')->name('stories.show');
-
-Route::post('/stories', 'StoryController@store')->name('stories.store');

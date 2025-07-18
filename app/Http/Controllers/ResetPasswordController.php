@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
 class ResetPasswordController extends Controller {
-    public function index() {
+    public function index(Request $request) {
         return view('auth.reset-password');
     }
 
@@ -24,8 +24,13 @@ class ResetPasswordController extends Controller {
             ], 400);
         }
 
-        try {
-            $response = Http::post(env('API_BASE_URL') . '/api/v1/user/forgot-password', [
+        try {   
+            $token = $request->session()->get('accessToken');
+            $response = Http::asForm()
+            ->withHeaders([
+                'Authorization' => 'Bearer ' . $token,
+            ])
+            ->post('http://localhost:3000/api/v1/user/forgot-password', [
                 'email' => $request->email,
             ]);
 
