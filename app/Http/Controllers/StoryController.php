@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Facades\Auth;
 
 class StoryController extends Controller
 {
@@ -17,16 +17,26 @@ class StoryController extends Controller
     public function index()
     {
         try {
-            $response = Http::get(env('API_BASE_URL') . '/api/v1/story');
+            $storyResponse = Http::get(env('API_BASE_URL') . '/api/v1/story');
 
-            if ($response->successful()) {
-                $storys = $response->json()['data'] ?? [];
-                return view('storys.explore', compact('storys'));
+            $viewedResponse = Http::get(env('API_BASE_URL') . '/api/v1/storyView', [
+                'user_id' => Auth::id()
+            ]);
+
+            if ($storyResponse->successful()) {
+                $stories = $storyResponse->json()['data'] ?? [];
+                $viewedStories = $viewedResponse->successful() ? collect($viewedResponse->json()['data'])->pluck('story_id')->all() : [];
+
+                foreach ($stories as &$story) {
+                    $story['is_viewed'] = in_array($story['id'], $viewedStories);
+                }
+
+                return view('layouts.app', compact('stories'));
             } else {
-                return view('storys.explore', ['storys' => [], 'error' => 'Failed to fetch storys']);
+                return view('layouts.app', ['stories' => [], 'error' => 'Failed to fetch stories']);
             }
         } catch (\Exception $e) {
-            return view('storys.explore', ['storys' => [], 'error' => 'Connection error']);
+            return view('layouts.app', ['stories' => [], 'error' => 'Connection error: ' . $e->getMessage()]);
         }
     }
 

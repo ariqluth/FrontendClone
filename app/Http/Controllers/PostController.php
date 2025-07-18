@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
-
 class PostController extends Controller
 {
     /**
@@ -20,37 +19,17 @@ class PostController extends Controller
             $response = Http::get(env('API_BASE_URL') . '/api/v1/posts');
 
             if ($response->successful()) {
-                $posts = $response->json()['data'] ?? [];
-                return view('posts.explore', compact('posts'));
+                $postsData = $response->json('data', []);
+                $posts = collect($postsData)->map(function ($post) {
+                    return (object) $post;
+                });
+
+                return view('explore.beranda', compact('posts'));
             } else {
-                return view('posts.explore', ['posts' => [], 'error' => 'Failed to fetch posts']);
+                return view('explore.beranda', ['posts' => [], 'error' => 'Gagal mengambil data postingan.']);
             }
         } catch (\Exception $e) {
-            return view('posts.explore', ['posts' => [], 'error' => 'Connection error']);
-        }
-    }
-
-    /**
-     * Get all posts from backend API.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getAllPosts()
-    {
-        try {
-            $response = Http::get(env('API_BASE_URL') . '/api/v1/posts');
-
-            if ($response->successful()) {
-                return response()->json($response->json(), $response->status());
-            } else {
-                return response()->json($response->json(), $response->status());
-            }
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to connect to backend service',
-                'error' => $e->getMessage()
-            ], 500);
+            return view('explore.beranda', ['posts' => [], 'error' => 'Gagal terhubung ke server.']);
         }
     }
 

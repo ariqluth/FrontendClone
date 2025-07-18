@@ -18,15 +18,10 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/', function () {
-    return view('auth/login');
-});
+Route::post('/', 'LoginController@login')->name('login');
 
 Route::get('/register', 'RegisterController@index')->name('register.index');
 
-
-// Auth Route
-Auth::routes();
 
 // Comment Route
 Route::resource('comments', 'CommentController');

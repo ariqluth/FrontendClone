@@ -2,9 +2,8 @@
 
 namespace App\View\Components;
 
-use App\Models\MenuGroup;
 use Illuminate\View\Component;
-
+use Illuminate\Support\Facades\Http;
 class Sidebar extends Component
 {
     public $title;
@@ -26,7 +25,9 @@ class Sidebar extends Component
      */
     public function render()
     {
-        $menuGroups = MenuGroup::with('menuItems')->get();
-        return view('components.sidebar', compact('menuGroups'));
+        // user profile and logout get api from backend
+        $userLogout = Http::post(env('API_BASE_URL') . '/api/v1/user/logout');
+        $responseLogout = $userLogout->json();
+        return view('components.sidebar', compact('responseLogout'));
     }
 }

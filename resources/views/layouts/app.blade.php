@@ -22,6 +22,12 @@
     <link rel="stylesheet" href="/assets/css/components.css">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="https://www.google.com/recaptcha/api.js?render={{ config('services.recaptcha.site_key') }}"></script>
+    <style>
+        .story-circle .story-item.unviewed-story img {
+            border: 3px solid #e91e63; /* Warna merah muda, sesuaikan jika perlu */
+            padding: 2px;
+        }
+    </style>
 </head>
 
 <body class="sidebar-mini">
@@ -29,53 +35,17 @@
         <div class="main-wrapper">
             <div class="navbar-bg"></div>
             <nav class="navbar navbar-expand-lg main-navbar">
-                <form class="form-inline mr-auto">
-                    <ul class="navbar-nav mr-3">
-                        <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i
-                                    class="fas fa-bars"></i></a></li>
-                        <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i
-                                    class="fas fa-search"></i></a></li>
-                    </ul>
-                    <div class="search-element">
-                        <input class="form-control" type="search" placeholder="Search" aria-label="Search"
-                            data-width="250">
-                        <button class="btn" type="submit"><i class="fas fa-search"></i></button>
-                        <div class="search-backdrop"></div>
-                    </div>
-                </form>
-                <ul class="navbar-nav navbar-right">
-                    <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown"
-                            class="nav-link nav-link-lg message-toggle beep"><i class="far fa-envelope"></i></a>
-                        <div class="dropdown-menu dropdown-list dropdown-menu-right">
-                            <div class="dropdown-header">Messages
-                                <div class="float-right">
-                                    <a href="#">Mark All As Read</a>
-                                </div>
-                            </div>
-                    </li>
-
-                    <li class="dropdown"><a href="#" data-toggle="dropdown"
-                            class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-                            <img alt="image" src="/assets/img/avatar/avatar-1.png" class="rounded-circle mr-1">
-                            <div class="d-sm-none d-lg-inline-block">Hi, {{ auth()->user()->name }}</div>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <a href="{{ route('profile') }}" class="dropdown-item has-icon">
-                                <i class="far fa-user"></i> Profile
+               {{-- circle story instagram --}}
+               <div class="story-circle">
+                    @if(isset($stories) && is_array($stories))
+                        @foreach ($stories as $story)
+                            {{-- Asumsi route 'stories.show' ada untuk melihat story --}}
+                            <a href="{{ route('stories.show', $story['id']) }}" class="story-item {{ !$story['is_viewed'] ? 'unviewed-story' : '' }}">
+                                <img src="{{ asset('storage/stories/' . $story['image']) }}" alt="Story {{ $story['id'] }}">
                             </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="{{ route('logout') }}"
-                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                                class="dropdown-item has-icon text-danger">
-                                <i class="fas fa-sign-out-alt"></i> Logout
-                            </a>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                style="display: none;">
-                                @csrf
-                            </form>
-                        </div>
-                    </li>
-                </ul>
+                        @endforeach
+                    @endif
+               </div>
             </nav>
             <div class="main-sidebar">
                 <x-sidebar title="Test" />
