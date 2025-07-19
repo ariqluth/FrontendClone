@@ -17,6 +17,25 @@ class PostController extends Controller
     {
         try {
             $token = $request->session()->get('accessToken');
+            $storyResponse = Http::asForm()
+            ->withHeaders([
+                'Authorization' => 'Bearer ' . $token,
+            ])
+            ->get('http://localhost:3000/api/v1/story');
+
+            $viewedResponse = Http::asForm()->withHeaders([
+                'Authorization' => 'Bearer ' . $token,
+            ])->get('http://localhost:3000/api/v1/storyView', [
+                'user_id' => $request->session()->get('user')->id
+            ]);
+
+            $stories = $storyResponse->json()['data'] ?? [];
+            $viewedStories = $viewedResponse->successful() ? collect($viewedResponse->json()['data'])->pluck('story_id')->all() : [];
+
+            foreach ($stories as &$story) {
+                $story['is_viewed'] = in_array($story['id'], $viewedStories);
+            }
+
             $response = Http::asForm()
             ->withHeaders([
                 'Authorization' => 'Bearer ' . $token,
@@ -29,12 +48,12 @@ class PostController extends Controller
                     return (object) $post;
                 });
 
-                return view('explore.beranda', compact('posts'));
+                return view('explore.beranda', compact('posts', 'stories'));
             } else {
-                return view('explore.beranda', ['posts' => [], 'error' => 'Gagal mengambil data postingan.']);
+                return view('explore.beranda', ['posts' => [], 'stories' => [], 'error' => 'Gagal mengambil data postingan.']);
             }
         } catch (\Exception $e) {
-            return view('explore.beranda', ['posts' => [], 'error' => 'Gagal terhubung ke server.']);
+            return view('explore.beranda', ['posts' => [], 'stories' => [], 'error' => 'Gagal terhubung ke server.']);
         }
     }
 

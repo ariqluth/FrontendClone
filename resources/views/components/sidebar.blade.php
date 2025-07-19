@@ -1,68 +1,88 @@
-<div class="d-flex flex-column flex-shrink-0 p-3 bg-light vh-100" style="width: 280px;">
-    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-        <span class="fs-4">Instagram</span>
+
+     <!-- DESKTOP / TABLET SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+    <a href="/" class="d-flex align-items-center pb-3 pl-3 mb-3 link-dark text-decoration-none border-bottom">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/1280px-Instagram_logo.svg.png" alt="Instagram" style="height: 40px;" class="me-2">
     </a>
-    <hr>
-    <ul class="nav nav-pills flex-column mb-auto">
-        <li class="nav-item">
-            <a href="#" class="nav-link active" aria-current="page">
-                <i class="fa fa-home me-2"></i>
-                Home
-            </a>
-        </li>
-        <li>
-            <a href="#" class="nav-link link-dark">
-                <i class="fa fa-search me-2"></i>
-                Search
-            </a>
-        </li>
-        <li>
-            <a href="#" class="nav-link link-dark">
-                <i class="fa fa-compass me-2"></i>
-                Explore
-            </a>
-        </li>
-        <li>
-            <a href="#" class="nav-link link-dark">
-                <i class="fa fa-film me-2"></i>
-                Reels
-            </a>
-        </li>
-        <li>
-            <a href="#" class="nav-link link-dark">
-                <i class="fa fa-paper-plane me-2"></i>
-                Messages
-            </a>
-        </li>
-        <li>
-            <a href="#" class="nav-link link-dark">
-                <i class="fa fa-heart me-2"></i>
-                Notifications
-            </a>
-        </li>
-        <li>
-            <a href="#" class="nav-link link-dark">
-                <i class="fa fa-plus-square me-2"></i>
-                Create
-            </a>
-        </li>
-        <li>
-            <a href="{{ route('post.create') }}" class="nav-link link-dark">
-                <i class="fa fa-plus-square me-2"></i>
-                Create
-            </a>
-        </li>
-        <li>
-            <a href="#" class="nav-link link-dark"> 
-                <img src="{{ asset('assets/img/avatar.png') }}" alt="">
-                Profile
-            </a>
-        </li>
-        <li>
-            <a href="{{ route('logout') }}" class="nav-link link-dark">
-                <i class="fa fa-sign-out me-2"></i>
-                Logout
-            </a>
-        </li>
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link active" href="#">
+          <i class="fas fa-home fa-fw"></i>
+          <span>Home</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">
+          <i class="fas fa-search fa-fw"></i>
+          <span>Search</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">
+          <i class="fas fa-compass fa-fw"></i>
+          <span>Explore</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">
+          <i class="fas fa-paper-plane fa-fw"></i>
+          <span>Messages</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">
+          <i class="fas fa-heart fa-fw"></i>
+          <span>Notifications</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">
+          <i class="fas fa-plus-square fa-fw"></i>
+          <span>Create</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">
+          <i class="fas fa-user-circle fa-fw"></i>
+          <span>Profile</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">
+          <i class="fas fa-bars fa-fw"></i>
+          <span>More</span>
+        </a>
+      </li>
+      <li class="nav-item mt-auto">
+        <a class="nav-link" href="#">
+          <i class="fas fa-sign-out-alt fa-fw"></i>
+          <span>Logout</span>
+        </a>
+      </li>
     </ul>
-</aside>
+  </nav>
+  
+  <!-- MOBILE BOTTOM BAR -->
+  <nav class="bottom-nav" id="bottom-nav">
+    <a href="#" class="bottom-nav-item active">
+      <i class="fas fa-home"></i>
+      <span>Home</span>
+    </a>
+    <a href="#" class="bottom-nav-item">
+      <i class="fas fa-search"></i>
+      <span>Search</span>
+    </a>
+    <a href="#" class="bottom-nav-item">
+      <i class="fas fa-plus-square"></i>
+      <span>Create</span>
+    </a>
+    <a href="#" class="bottom-nav-item">
+      <i class="fas fa-heart"></i>
+      <span>Likes</span>
+    </a>
+    <a href="#" class="bottom-nav-item">
+      <i class="fas fa-user-circle"></i>
+      <span>Profile</span>
+    </a>
+  </nav>
+
