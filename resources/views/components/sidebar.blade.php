@@ -1,7 +1,7 @@
 
      <!-- DESKTOP / TABLET SIDEBAR -->
 <nav class="sidebar" id="sidebar">
-    <a href="/" class="d-flex align-items-center pb-3 pl-3 mb-3 link-dark text-decoration-none border-bottom">
+    <a href="/" class="d-flex align-items-center pb-3 pl-3 mb-3 text-decoration-none">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/1280px-Instagram_logo.svg.png" alt="Instagram" style="height: 40px;" class="me-2">
     </a>
     <ul class="nav flex-column">

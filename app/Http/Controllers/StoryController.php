@@ -37,7 +37,7 @@ class StoryController extends Controller
                 foreach ($stories as &$story) {
                     $story['is_viewed'] = in_array($story['id'], $viewedStories);
                 }
-
+          
                 return view('layouts.app', compact('stories'));
             } else {
                 return view('layouts.app', ['stories' => [], 'error' => 'Failed to fetch stories']);

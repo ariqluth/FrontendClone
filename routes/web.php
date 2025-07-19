@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RegisterController;
@@ -49,4 +50,4 @@ Route::get('/stories/{userId', [StoryController::class, 'show'])->name('story.sh
 
 Route::post('/stories', [StoryController::class, 'store'])->name('story.store');
 
-
+Route::post('/comment', [CommentController::class, 'store'])->name('comment.store');

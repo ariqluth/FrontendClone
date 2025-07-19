@@ -24,19 +24,33 @@
     <div id="app">
         <div class="main-layout">
             <x-sidebar title="Instagram" />
-            <div class="stories-container">
-                @foreach ($stories as $story)
-                    <div class="story">
-                        <a href="#" class="story-avatar">
-                            <img src="{{ $story->user->profile_photo_url }}" alt="User Avatar">
-                        </a>
-                        <span>{{ $story->user->name }}</span>
-                    </div>
-                @endforeach 
-            </div>  
             <div class="main-content">
                 @yield('content')
             </div>
+        </div>
+        
+        <!-- Mobile Bottom Navigation -->
+        <div class="bottom-nav">
+            <a href="#" class="bottom-nav-item active">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="#" class="bottom-nav-item">
+                <i class="fas fa-search"></i>
+                <span>Search</span>
+            </a>
+            <a href="#" class="bottom-nav-item">
+                <i class="fas fa-plus-square"></i>
+                <span>Add</span>
+            </a>
+            <a href="#" class="bottom-nav-item">
+                <i class="far fa-heart"></i>
+                <span>Likes</span>
+            </a>
+            <a href="#" class="bottom-nav-item">
+                <i class="far fa-user"></i>
+                <span>Profile</span>
+            </a>
         </div>
     </div>
 
