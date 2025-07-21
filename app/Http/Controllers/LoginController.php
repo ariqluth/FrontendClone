@@ -53,7 +53,6 @@ class LoginController extends Controller
 
                 return redirect()->route('post.index');
             } else {
-                // Jika login gagal, kembali ke halaman login dengan pesan error
                 return back()->withErrors([
                     'email' => 'The provided credentials do not match our records.',
                 ]);

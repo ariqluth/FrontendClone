@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RegisterController;
@@ -36,7 +37,7 @@ Route::get('/beranda', [PostController::class, 'index'])->name('post.index');
 
 Route::get('/post-create', [PostController::class, 'create'])->name('post.create');
 
-Route::post('/post-store', [PostController::class, 'store'])->name('post.store');
+Route::post('/post-posting', [PostController::class, 'posting'])->name('post.posting');
 
 Route::delete('/post-delete/{post}', [PostController::class, 'destroy'])->name('post.destroy');
 
@@ -51,3 +52,9 @@ Route::get('/stories/{userId', [StoryController::class, 'show'])->name('story.sh
 Route::post('/stories', [StoryController::class, 'store'])->name('story.store');
 
 Route::post('/comment', [CommentController::class, 'store'])->name('comment.store');
+
+Route::get('/like/{post?}', [LikeController::class, 'index'])->name('like.index');
+
+Route::post('/like/{post}', [LikeController::class, 'store'])->name('like.store');
+
+Route::delete('/like/{post}', [LikeController::class, 'destroy'])->name('like.destroy');

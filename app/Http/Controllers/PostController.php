@@ -138,14 +138,14 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function posting(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'content' => 'required|string|max:1000',
-            'imageUrl' => 'nullable|string|url',
+            'imageUrl' => 'nullable|file|mimes:jpg,jpeg,png,svg|max:10240', // 10MB max
             'authorId' => 'required|string',
         ]);
-
+       
         if ($validator->fails()) {
             return response()->json([
                 'success' => false,
@@ -156,26 +156,44 @@ class PostController extends Controller
 
         try {
             $token = $request->session()->get('accessToken');
-            $response = Http::asForm()
-            ->withHeaders([
-                'Authorization' => 'Bearer ' . $token,
-            ])
-            ->post('http://localhost:3000/api/v1/posts', [
+            $postData = [
                 'content' => $request->content,
-                'imageUrl' => $request->imageUrl,
                 'authorId' => $request->authorId,
+            ];
+
+            $httpRequest = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $token,
             ]);
 
+            if ($request->hasFile('imageUrl')) {
+                $httpRequest = $httpRequest->attach(
+                    'imageUrl',
+                    file_get_contents($request->file('imageUrl')->path()),
+                    $request->file('imageUrl')->getClientOriginalName()
+                );
+            }
+
+            $response = $httpRequest->post('http://localhost:3000/api/v1/post', $postData);
+
             if ($response->successful()) {
-                return response()->json($response->json(), $response->status());
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Post created successfully',
+                    'data' => $response->json()
+                ], $response->status());
             } else {
-                return response()->json($response->json(), $response->status());
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to create post',
+                    'errors' => $response->json()
+                ], $response->status());
             }
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to connect to backend service',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
+                'detail' => $e->getMessage(),
             ], 500);
         }
     }
@@ -194,7 +212,7 @@ class PostController extends Controller
             ->withHeaders([
                 'Authorization' => 'Bearer ' . $token,
             ])
-            ->get('http://localhost:3000/api/v1/posts/' . $id);
+            ->get('http://localhost:3000/api/v1/post/' . $id);
 
             if ($response->successful()) {
                 return response()->json($response->json(), $response->status());
@@ -224,12 +242,82 @@ class PostController extends Controller
             ->withHeaders([
                 'Authorization' => 'Bearer ' . $token,
             ])
-            ->delete('http://localhost:3000/api/v1/posts/' . $id);
+            ->delete('http://localhost:3000/api/v1/post/' . $id);
 
             if ($response->successful()) {
                 return response()->json($response->json(), $response->status());
+                return redirect()->route('post.index')->with('success', 'Post deleted successfully');
             } else {
                 return response()->json($response->json(), $response->status());
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to connect to backend service',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Create method for handling create route.
+     */
+    public function create()
+    {
+        return view('posts.create');
+    }
+
+    /**
+     * Update method for handling update route.
+     */
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'content' => 'required|string|max:1000',
+            'imageUrl' => 'nullable|file|mimes:jpg,jpeg,png,svg|max:10240',
+        ]);
+       
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation errors',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        try {
+            $token = $request->session()->get('accessToken');
+            
+            $postData = [
+                'content' => $request->content,
+            ];
+
+            $httpRequest = Http::withHeaders([
+                'Authorization' => 'Bearer ' . $token,
+            ]);
+
+            if ($request->hasFile('imageUrl')) {
+                $httpRequest = $httpRequest->attach(
+                    'imageUrl',
+                    file_get_contents($request->file('imageUrl')->path()),
+                    $request->file('imageUrl')->getClientOriginalName()
+                );
+            }
+
+            $response = $httpRequest->put('http://localhost:3000/api/v1/post/' . $id, $postData);
+
+            if ($response->successful()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Post updated successfully',
+                    'data' => $response->json()
+                ], $response->status());
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to update post',
+                    'errors' => $response->json()
+                ], $response->status());
             }
         } catch (\Exception $e) {
             return response()->json([
